@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love! ❤️</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll due to heart animations */
+            background-image: linear-gradient(to bottom right, #ffebee, #ffcdd2); /* Soft gradient background */
+        }
+
+        /* Custom CSS for heart animations */
+        .heart {
+            position: absolute;
+            color: #ff69b4; /* Hot pink */
+            font-size: 2rem;
+            animation: floatUp 5s forwards;
+            opacity: 0;
+            pointer-events: none; /* Allow clicks to pass through hearts */
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.5); /* Subtle glow */
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(-20px) scale(1);
+            }
+            100% {
+                transform: translateY(-200px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Custom styling for cake and sections */
+        .section-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        #intro-section {
+            transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+        }
+
+        #intro-section.cut {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none; /* Disable interaction after cut */
+        }
+
+        /* For photo/quote fade in/out */
+        .fade-out {
+            opacity: 0;
+        }
+        .fade-in {
+            opacity: 1;
+        }
+
+        /* Animation for I Love You text */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+        .animate-pulse {
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        /* Animation for rose image */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spinSlow 10s linear infinite; /* Slow continuous spin */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 1rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Button styling */
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            background-image: linear-gradient(to right, #ff7e5f, #feb47b); /* Warm gradient */
+            color: white;
+            font-weight: bold;
+            border-radius: 9999px; /* Fully rounded */
+            box-shadow: 0 4px 15px rgba(255, 126, 95, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 1.5rem;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 126, 95, 0.6);
+        }
+
+        .action-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(255, 126, 95, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center text-gray-800">
+
+    <!-- Intro Section -->
+    <section id="intro-section" class="section-container bg-opacity-70 rounded-xl shadow-lg p-8 mx-4 my-8 max-w-4xl w-full">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-pink-600 mb-4 animate-bounce">
+            Happy Birthday, My BETA! ❤️
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-700 mb-8">
+            Every moment with you is a celebration. Today, let's make it extra special!
+        </p>
+        <img src="birthday cake.jpg" alt="Birthday Cake" id="cake-image"
+             class="w-64 md:w-80 lg:w-96 rounded-xl shadow-xl cursor-pointer transform hover:scale-105 transition-transform duration-300"
+             title="Click me to cut the cake!">
+        <button id="cut-cake-button" class="action-button">
+            Cut the Cake! 🎂
+        </button>
+    </section>
+
+    <!-- Photos & Quotes Section (Initially hidden) -->
+    <section id="photos-quotes-section" class="section-container hidden">
+        <h2 class="text-4xl md:text-5xl font-bold text-pink-600 mb-6">
+            Cherished Memories & Sweet Words
+        </h2>
+
+        <!-- "I Love You!" text always shown after cake cut -->
+        <p id="i-love-you-text" class="text-6xl font-extrabold text-red-500 mb-8 animate-pulse hidden">
+            I Love You! ❤️
+        </p>
+
+        <!-- Rose image always shown after cake cut -->
+        <img src="https://placehold.co/150x150/FFC0CB/FFFFFF?text=Rose+Icon" alt="A beautiful rose" id="rose-image"
+             class="w-32 h-32 object-contain hidden mb-8 animate-spin-slow">
+
+        <div id="dynamic-content-container" class="relative w-full max-w-2xl mx-auto bg-white bg-opacity-80 rounded-xl shadow-lg p-6">
+            <!-- Changed classes here to allow original image size while staying within bounds -->
+            <img id="current-display-photo" src="" alt="A cherished memory"
+                 class="max-w-full h-auto max-h-[75vh] rounded-xl shadow-md transition-opacity duration-700 ease-in-out">
+            <p id="current-quote" class="text-xl italic text-gray-700 mt-6 mb-6 transition-opacity duration-700 ease-in-out">
+                <!-- Quote will be inserted here by JavaScript -->
+            </p>
+        </div>
+
+        <button id="next-content-button" class="action-button">
+            Next Memory ✨
+        </button>
+    </section>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modal-image">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const introSection = document.getElementById('intro-section');
+            const cakeImage = document.getElementById('cake-image');
+            const cutCakeButton = document.getElementById('cut-cake-button');
+            const photosQuotesSection = document.getElementById('photos-quotes-section');
+            const iLoveYouText = document.getElementById('i-love-you-text');
+            const roseImage = document.getElementById('rose-image');
+            const dynamicContentContainer = document.getElementById('dynamic-content-container');
+            const currentDisplayPhoto = document.getElementById('current-display-photo');
+            const currentQuoteElement = document.getElementById('current-quote');
+            const nextContentButton = document.getElementById('next-content-button');
+            const imageModal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalClose = document.querySelector('.modal-close');
+
+            // --- Heart Animation (Existing function) ---
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️'; // Unicode heart emoji
+                document.body.appendChild(heart);
+
+                // Randomize initial position
+                const startX = Math.random() * window.innerWidth;
+                const startY = window.innerHeight;
+                heart.style.left = `${startX}px`;
+                heart.style.top = `${startY}px`;
+
+                // Randomize size slightly
+                const size = Math.random() * 1 + 1; // Between 1rem and 2rem
+                heart.style.fontSize = `${size}rem`;
+
+                // Randomize animation duration and delay
+                const duration = 3 + Math.random() * 2; // 3 to 5 seconds
+                const delay = Math.random() * 2; // 0 to 2 seconds
+                heart.style.animationDuration = `${duration}s`;
+                heart.style.animationDelay = `${delay}s`;
+
+                // Remove heart after animation
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                });
+            }
+
+            // Generate hearts every 300ms (Existing interval)
+            setInterval(createHeart, 300);
+
+            // --- Love Quotes (Existing array) ---
+            const loveQuotes = [
+                "Every love story is beautiful, but ours is my favorite.",
+                "You are my sun, my moon, and all my stars.",
+                "I fell in love with her courage, her sincerity, and her flaming self respect. And it's these things I'd believe in, even if the whole world indulged in wild suspicions that she wasn't all she should be. I love her and it is the beginning of everything.",
+                "You are the finest, loveliest, tenderest, and most beautiful person I have ever known—and even that is an understatement.",
+                "I swear I couldn't love you more than I do right now, and yet I know I will tomorrow.",
+                "My heart is, and always will be, yours.",
+                "I love you without knowing how, or when, or from where. I love you directly without problems or pride: I love you like this because I don't know any other way to love.",
+                "To the world, you may be one person, but to one person you are the world.",
+                "The best thing to hold onto in life is each other.",
+                "You know you're in love when you can't fall asleep because reality is finally better than your dreams.",
+                "If I had a flower for every time I thought of you...I could walk through my garden forever.",
+                "I saw that you were perfect, and so I loved you. Then I saw that you were not perfect and I loved you even more.",
+                "I love you more than I have ever found a way to say to you.",
+                "Doubt thou the stars are fire; Doubt that the sun doth move; Doubt truth to be a liar; But never doubt I love.",
+                "I have loved you since forever, and I will love you for forever more.",
+                "You are my greatest adventure.",
+                "Being deeply loved by someone gives you strength, while loving someone deeply gives you courage.",
+                "I choose you. And I'll choose you over and over and over. Without pause, without a doubt, in a heartbeat. I'll keep choosing you.",
+                "You are the answer to every prayer I've offered.",
+                "I would rather spend one lifetime with you, than face all the ages of this world alone."
+            ];
+            let currentQuoteIndex = 0;
+
+            // --- YOUR CUSTOM PHOTOS GO HERE (Replace these placeholder URLs) ---
+            // Make sure these are direct links to your image files (ending in .jpg, .png, .gif, etc.)
+            const photos = [
+                "1.jpg", // Replace with your actual photo URL
+                "2.jpg", // Replace with your actual photo URL
+                "3.jpg", // Replace with your actual photo URL
+                "4.jpg",
+                "5.jpg",
+                "6.jpg",
+                "7.jpg",
+                "8.jpg",
+                "9.jpg",
+                "10.jpg",
+                "11.jpg",
+                "12.jpg",
+                "13.jpg",
+                "14.jpg",
+                "15.jpg",
+                "16.jpg",
+                "17.jpg",
+                "18.jpg",
+                "19.jpg",
+                "20.jpg"
+            ];
+            let currentPhotoIndex = 0;
+
+            // --- FUNCTIONS (Changes start here) ---
+
+            // New function: createManyHearts
+            function createManyHearts() {
+                const numberOfHearts = 500; // Max 500 hearts as requested
+                for (let i = 0; i < numberOfHearts; i++) {
+                    // Stagger the hearts creation slightly for a burst effect
+                    setTimeout(createHeart, i * 10);
+                }
+            }
+
+            // New function: showFinalMessageAndHearts
+            function showFinalMessageAndHearts() {
+                // Hide the current photo/quote container
+                dynamicContentContainer.classList.add('hidden');
+                dynamicContentContainer.classList.remove('fade-in'); // Ensure fade-in is removed
+
+                // Ensure "I Love You!" text and rose are visible and updated
+                iLoveYouText.textContent = "I Love You, My Beta! ❤️"; // Update text as requested
+                iLoveYouText.classList.remove('hidden');
+                roseImage.classList.remove('hidden');
+
+                // Disable the next button as the sequence is complete
+                nextContentButton.textContent = "That's all for now! 😊";
+                nextContentButton.disabled = true;
+                nextContentButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+                // Trigger the burst of hearts
+                createManyHearts();
+            }
+
+            // Modified function: displayNextPhotoAndQuote
+            function displayNextPhotoAndQuote() {
+                // Check if it's the last photo/quote before incrementing
+                if (currentPhotoIndex === photos.length - 1) {
+                    // If it's the last one, transition to the final message
+                    currentDisplayPhoto.classList.add('fade-out');
+                    currentQuoteElement.classList.add('fade-out');
+                    setTimeout(showFinalMessageAndHearts, 700); // Wait for fade-out transition
+                    return; // Stop here, don't proceed with normal display
+                }
+
+                // Apply fade-out class to current elements
+                currentDisplayPhoto.classList.add('fade-out');
+                currentQuoteElement.classList.add('fade-out');
+
+                // After the fade-out transition, update content and fade in
+                setTimeout(() => {
+                    // Increment indices for next display
+                    currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                    currentQuoteIndex = (currentQuoteIndex + 1) % loveQuotes.length;
+
+                    currentDisplayPhoto.src = photos[currentPhotoIndex];
+                    currentQuoteElement.textContent = loveQuotes[currentQuoteIndex];
+
+                    // Remove fade-out and add fade-in class
+                    currentDisplayPhoto.classList.remove('fade-out');
+                    currentQuoteElement.classList.remove('fade-out');
+                    currentDisplayPhoto.classList.add('fade-in');
+                    currentQuoteElement.classList.add('fade-in');
+                }, 700); // This delay matches the CSS transition duration for fade-out
+            }
+
+            // --- Event Listeners (Changes start here) ---
+
+            // Cut the Cake button click (Existing function, no change needed here for new logic)
+            cutCakeButton.addEventListener('click', () => {
+                // Add 'cut' class to intro section for animation
+                introSection.classList.add('cut');
+
+                // After the intro section fades out, display the photos and quotes
+                setTimeout(() => {
+                    introSection.classList.add('hidden'); // Fully hide after animation
+                    photosQuotesSection.classList.remove('hidden'); // Show the next section
+
+                    // Show and animate "I Love You!" text and rose image
+                    iLoveYouText.classList.remove('hidden');
+                    roseImage.classList.remove('hidden');
+                    roseImage.classList.add('animate-fadeIn'); // Apply fade-in animation to rose
+
+                    // Animate the main photos/quotes section into view and display first content
+                    setTimeout(() => {
+                        photosQuotesSection.classList.add('visible'); // If you had a visible class for the section
+                        displayNextPhotoAndQuote(); // Show the first photo and quote
+                    }, 100); // Small delay to ensure display property is set
+                }, 800); // Match this timeout to the CSS transition duration for intro-section
+            });
+
+            // Next Content button click (Modified function)
+            nextContentButton.addEventListener('click', () => {
+                displayNextPhotoAndQuote();
+            });
+
+            // Open Modal when photo is clicked (even the current one) (Existing function)
+            currentDisplayPhoto.addEventListener('click', () => {
+                modalImage.src = currentDisplayPhoto.src;
+                imageModal.style.display = 'flex';
+            });
+
+            // Close Modal (Existing function)
+            modalClose.addEventListener('click', () => {
+                imageModal.style.display = 'none';
+            });
+
+            // Close modal if clicked outside image (Existing function)
+            imageModal.addEventListener('click', (event) => {
+                if (event.target === imageModal) {
+                    imageModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
